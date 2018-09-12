@@ -9,8 +9,12 @@ noremap <Down> <Nop>
 noremap <Left> <Nop>
 noremap <Right> <Nop>
 
+" associate .handlebars and .hbs with HTML
+au BufNewFile,BufRead *.handlebars set filetype=html
+
 " 标签页显示序号
 """""""""""""""""""""
+set pastetoggle=<F3>
 set tabline=%!TabLine()  " custom tab pages line
 function TabLine()
     let s = '' " complete tabline goes here
@@ -113,14 +117,36 @@ func! RunPy()
     if &filetype == "python"
         exec "!time python3 %"
     endif
+    if &filetype == "go"
+        exec "!go run %"
+    endif
+    if &filetype == "rust"
+        exec "!rustc % -o rust.out && ./rust.out"
+    endif
+    if &filetype == "c"
+        exec "!gcc % -o a.out && ./a.out"
+    endif
+    if &filetype == "rs"
+        exec "!rustc % -o rust.out && ./rust.out"
+    endif
+    if &filetype == "cpp"
+        exec "!g++ % && ./a.out"
+    endif
 endfunc
+
+"map <F4> :call RunGo()<CR>
+"func! RunGo()
+"    if &filetype == "go"
+"        exec "!go run %"
+""    endif
+"endfunc
 
 "创建新文件自注释
 """"""""""""""""""""
 autocmd BufNewFile *.py exec ":call SetComment()"
 func SetComment()
     if expand("%:e") == 'py'
-        call setline(1, "#!/usr/bin/env python")
+        call setline(1, "#!/usr/bin/env python3")
     endif
 endfunc
 
@@ -189,20 +215,32 @@ set hlsearch
 """"""""""""""""""""
 filetype off
 set rtp+=~/.vim/bundle/Vundle.vim
-" call vundle#begin()
-" Plugin 'VundleVim/Vundle.vim'
-" Bundle 'Raimondi/delimitMate'
-" Bundle 'kien/rainbow_parentheses.vim'
-" Bundle 'Lokaltog/vim-powerline'
-" Plugin 'scrooloose/nerdtree'
-" Plugin 'Yggdroot/indentLine'
-" Plugin 'Valloric/YouCompleteMe'
-" Bundle 'klen/python-mode'
-" Bundle 'nvie/vim-flake8'
-" Bundle 'bronson/vim-trailing-whitespace'
-" Bundle 'hdima/python-syntax'
-" Bundle 'kien/ctrlp.vim'
-" call vundle#end()
+call vundle#begin()
+Plugin 'fatih/vim-go'
+Plugin 'godlygeek/tabular'
+Plugin 'mxw/vim-jsx'
+Plugin 'mattn/emmet-vim'
+Plugin 'plasticboy/vim-markdown'
+Plugin 'VundleVim/Vundle.vim'
+Plugin 'iamcco/markdown-preview.vim'
+Plugin 'iamcco/mathjax-support-for-mkdp'
+Bundle 'Raimondi/delimitMate'
+Bundle 'kien/rainbow_parentheses.vim'
+Bundle 'Lokaltog/vim-powerline'
+Plugin 'marijnh/tern_for_vim'
+Plugin 'scrooloose/nerdtree'
+Plugin 'suan/vim-instant-markdown'
+Plugin 'othree/html5.vim'
+Plugin 'hail2u/vim-css3-syntax'
+Plugin 'pangloss/vim-javascript'
+Plugin 'Yggdroot/indentLine'
+Plugin 'Valloric/YouCompleteMe'
+Bundle 'klen/python-mode'
+Bundle 'nvie/vim-flake8'
+Bundle 'bronson/vim-trailing-whitespace'
+Bundle 'hdima/python-syntax'
+Bundle 'kien/ctrlp.vim'
+call vundle#end()
 filetype plugin indent on
 
 " 文件搜索
